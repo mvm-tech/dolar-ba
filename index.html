@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi dolar</title>
+    <style>body { font-family: Arial, sans-serif; background: #121212; color: #fff; text-align: center; padding-top: 50px; }
+        .card { background: #1e1e1e; padding: 20px; border-radius: 10px; width: 250px; margin: 0 auto; border: 1px solid #00ff88; }
+        button { background: #00ff88; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 20px; }</style>
+</head>
+<body>
+    <h1>Hola de Buenos Aires</h1>
+<div class="card">
+    <h3>Dolar Blue</h3>
+    <p>Compra: <span id="buy">Cargando...</span></p>
+    <p>Venta: <span id="sell">Cargando...</span></p>
+    <input type="number" id="usd-input" placeholder="Dollars (USD)" oninput="convert()">
+    <p>Sera en pesos: <span id="pesos-result">0</span> ARS</p> 
+    </div>
+    <button onclick="getRate()">Averiguar la tasa</button>  
+
+
+    <script>
+   
+    /*
+    // Сюда мы на следующем шаге вставим магию, которая оживит эту карточку
+    
+        function getRate() {
+          // 1. Stuchimsy k otkrutomy argentinskomy API
+          fetch('https://bluelytics.com.ar')
+          // 2. Prevrashaem otvet iz internetav ponytnuy dly JS format (JSON)
+          .then(response => response.json())
+          // 3. Rabotaem s poluchennumi dannumi (oni teper lezhat v peremennoy data)
+          .then(data => {
+            // Nahodim nashy pystuy korobochky na stranice po ee ID
+            // y vstavlyem tyda ceny pokypki (compra) iz poluchennux dannux
+            document.getElementById('buy').innerText = data.blue.value_buy + ' ARS';
+          })
+          // 4. Esli interneta net ili sait ypal = vuvedem oshibky v console
+          .catch(error => { 
+            console.error('Oshibka:', error);
+          document.getElementById('buy').innerText = 'Oshibka';
+         });
+        }*/
+
+      
+      /* function getRate() {
+        
+    // Вместо fetch мы вручную создаем объект, похожий на ответ из банка
+    const mockData = {
+        compra: 1395,
+        venta: 1425
+    };
+    
+    // Вставляем цифру в нашу коробочку и добавляем значок песо!
+    document.getElementById('buy').innerText = mockData.compra + ' ARS';
+} */
+
+let currentRate = 0;
+
+function getRate() {
+    // Pishem pered ssulkoy specialnuy most, kotoruy otkroet nam dostup bez oshibok
+  /*const proxy = 'https://herokuapp.com';
+    const url = 'https://dolarapi.com';*/
+    const url = 'https://dolarapi.com/v1/dolares/blue';
+    // Vkluchaem nadpis "Cargando...", poca letit zapros
+    document.getElementById('buy').innerText = 'Cargando...';
+    document.getElementById('sell').innerText = 'Cargando...';
+    
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        // Berem realnuy cifry iz argentinskogo API!
+        document.getElementById('buy').innerText = data.compra + 'ARS'; 
+        document.getElementById('sell').innerText = data.venta + 'ARS';
+        currentRate = data.venta;
+    })
+    .catch(error => {
+console.error('Oshibka:', error);
+document.getElementById('buy').innerText = 'Oshibka';
+    });
+}
+
+
+
+function convert() { 
+
+const dollars = 
+document.getElementById('usd-input').value;
+
+const  result = dollars * currentRate;
+
+document.getElementById('pesos-result').innerText = result;
+
+}
+
+/*
+function getRate() {
+    // Включаем надпись загрузки
+    document.getElementById('buy').innerText = 'Cargando...';
+
+    // Используем самое стабильное API, которое никогда не выдает ошибку CORS
+    fetch('https://er-api.com')
+        .then(response => response.json())
+        .then(data => {
+            // Берем курс аргентинского песо к доллару из мировой базы данных
+            // Округляем до целого числа для красоты
+            const rateARS = Math.round(data.rates.ARS);
+            
+            // Выводим результат на экран!
+            document.getElementById('buy').innerText = rateARS + ' ARS';
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            document.getElementById('buy').innerText = 'Oshibka';
+        });
+}*/
+        </script>
+</body>
+</html>
