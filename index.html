@@ -14,6 +14,10 @@
     <h3>Dolar Blue</h3>
     <p>Compra: <span id="buy">Cargando...</span></p>
     <p>Venta: <span id="sell">Cargando...</span></p>
+    <select id="operation-type" oninput="convert">
+        <option value="sell">Quiero comprar dolar (curso Venta)</option>
+        <option value="buy">Quiero vender dolar (curso Compra)</option>
+    </select>
     <input type="number" id="usd-input" placeholder="Dollars (USD)" oninput="convert()">
     <p>Sera en pesos: <span id="pesos-result">0</span> ARS</p> 
     </div>
@@ -56,7 +60,10 @@
     document.getElementById('buy').innerText = mockData.compra + ' ARS';
 } */
 
-let currentRate = 0;
+
+
+let rateCompra = 0; // Venda para cliente
+let rateVenta = 0 // Compra para cliente
 
 function getRate() {
     // Pishem pered ssulkoy specialnuy most, kotoruy otkroet nam dostup bez oshibok
@@ -67,6 +74,8 @@ function getRate() {
     document.getElementById('buy').innerText = 'Cargando...';
     document.getElementById('sell').innerText = 'Cargando...';
     
+    const type = document.getElementById('operation-type').value;
+
     fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -74,6 +83,9 @@ function getRate() {
         document.getElementById('buy').innerText = data.compra + 'ARS'; 
         document.getElementById('sell').innerText = data.venta + 'ARS';
         currentRate = data.venta;
+        rateCompra = data.compra;
+        rateVenta = data.venta;
+      
     })
     .catch(error => {
 console.error('Oshibka:', error);
@@ -85,11 +97,26 @@ document.getElementById('buy').innerText = 'Oshibka';
 
 function convert() { 
 
-const dollars = 
+    const dollars = 
 document.getElementById('usd-input').value;
+const type = document.getElementById('operation-type').value;
+let result = 0;
 
-const  result = dollars * currentRate;
+    if (type === 'buy') {
+   
+      result = dollars * rateCompra;
 
+    }
+
+    else {
+
+      //  rateVenta = data.venta;
+
+      result = dollars * rateVenta;
+}
+
+// const  result = dollars * currentRate;
+// Vuvod informacii na ekran
 document.getElementById('pesos-result').innerText = result;
 
 }
